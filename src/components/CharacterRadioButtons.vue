@@ -1,9 +1,15 @@
 <template>
   <div class="radiobtn-group">
-    <p class="radiobtn-group--title">{{ title }}</p>
+    <p data-test="radiotitle" class="radiobtn-group--title">{{ title }}</p>
     <div v-for="value of values" :key="value">
-      <input type="radio" :id="value" :value="value" v-model="picked" />
-      <label :for="value">{{ value }}</label>
+      <input
+        data-test="radiobtn"
+        type="radio"
+        :id="value"
+        :value="value"
+        v-model="picked"
+      />
+      <label data-test="radiolbl" :for="value">{{ value }}</label>
     </div>
   </div>
 </template>

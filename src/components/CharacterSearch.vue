@@ -10,12 +10,13 @@
     "
   >
     <input
+      data-test="radiotitle"
       class="search-input"
       type="text"
       ref="input"
       placeholder="Character name"
     />
-    <div class="radiobtn-collection">
+    <div data-test="searchradiobtngroup" class="radiobtn-collection">
       <CharacterRadioButtons
         v-on:picked="changeStatus($event)"
         :title="'Select status'"
@@ -27,7 +28,13 @@
         :values="['All', 'Male', 'Female']"
       />
     </div>
-    <input class="search-btn" type="submit" id="search-btn" value="Search" />
+    <input
+      data-test="searchbtn"
+      class="search-btn"
+      type="submit"
+      id="search-btn"
+      value="Search"
+    />
   </form>
 </template>
 

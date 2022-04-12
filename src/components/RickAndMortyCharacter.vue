@@ -1,20 +1,24 @@
 <template>
   <div class="character-card">
-    <img class="character-image" :src="value.image" />
+    <img
+      data-test="characterimage"
+      class="character-image"
+      :src="value.image"
+    />
     <div class="character-attributes">
-      <p class="character-attribute">
+      <p data-test="charactername" class="character-attribute">
         <span class="attribute-title">Name: </span>{{ value.name }}
       </p>
-      <p class="character-attribute">
+      <p data-test="characterstatus" class="character-attribute">
         <span class="attribute-title">Status: </span>{{ value.status }}
       </p>
-      <p class="character-attribute">
+      <p data-test="characterspecies" class="character-attribute">
         <span class="attribute-title">Species: </span>{{ value.species }}
       </p>
-      <p class="character-attribute">
+      <p data-test="charactergender" class="character-attribute">
         <span class="attribute-title">Gender: </span>{{ value.gender }}
       </p>
-      <p class="character-attribute">
+      <p data-test="characterorigin" class="character-attribute">
         <span class="attribute-title">Origin: </span>{{ value.origin.name }}
       </p>
     </div>

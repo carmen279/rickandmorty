@@ -3,17 +3,18 @@
     <h1>RICK AND MORTY API</h1>
     <div>
       <CharacterSearch
+        data-test="charactersearch"
         v-on:search="
           filterCharacters($event.name, $event.status, $event.gender)
         "
-      >
-      </CharacterSearch>
+      />
       <TransitionGroup name="list" tag="ul">
         <RickAndMortyCharacter
+          data-test="charactercard"
           v-for="character of characters"
           :key="character.id"
           :value="character"
-        ></RickAndMortyCharacter>
+        />
       </TransitionGroup>
     </div>
   </div>
@@ -30,16 +31,15 @@ export default defineComponent({
   },
   data() {
     return {
-      characters: [],
+      characters: [] as any[],
     };
   },
   methods: {
-    getRickAndMortyChars() {
-      fetch("https://rickandmortyapi.com/api/character")
+    async getRickAndMortyChars() {
+      const data = await fetch("https://rickandmortyapi.com/api/character")
         .then((response) => response.json())
-        .then((data) => {
-          this.characters = data.results;
-        });
+        .then((data) => data.results);
+      return data;
     },
     filterCharacters(name: string, status: string, gender: string) {
       let filterUrl = `https://rickandmortyapi.com/api/character/?name=${name}`;
@@ -60,8 +60,8 @@ export default defineComponent({
         });
     },
   },
-  mounted() {
-    this.getRickAndMortyChars();
+  async mounted() {
+    this.characters = await this.getRickAndMortyChars();
   },
 });
 </script>
