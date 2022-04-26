@@ -1,20 +1,12 @@
 <template>
-  <form
-    class="search-form"
-    v-on:submit.prevent="
-      $emit('search', {
-        name: this.$refs.input.value,
-        status: this.status,
-        gender: this.gender,
-      })
-    "
-  >
+  <form class="search-form">
     <input
       data-test="radiotitle"
       class="search-input"
       type="text"
-      ref="input"
+      v-model="text"
       placeholder="Character name"
+      @input="filterCharacters()"
     />
     <div data-test="searchradiobtngroup" class="radiobtn-collection">
       <CharacterRadioButtons
@@ -28,34 +20,44 @@
         :values="['All', 'Male', 'Female']"
       />
     </div>
-    <input
-      data-test="searchbtn"
-      class="search-btn"
-      type="submit"
-      id="search-btn"
-      value="Search"
-    />
+    <p>Number of humans: {{ countHumans }}</p>
   </form>
 </template>
 
 <script>
 import { defineComponent } from "vue";
 import CharacterRadioButtons from "@/components/CharacterRadioButtons";
+import createStore from "@/store";
 
 export default defineComponent({
   components: { CharacterRadioButtons },
   data() {
     return {
+      text: "",
       status: "",
       gender: "",
     };
   },
+  computed: {
+    countHumans() {
+      return createStore.getters.getNumHumans;
+    },
+  },
   methods: {
     changeStatus(status) {
       this.status = status;
+      this.filterCharacters();
     },
     changeGender(gender) {
       this.gender = gender;
+      this.filterCharacters();
+    },
+    filterCharacters() {
+      createStore.dispatch("filterChars", {
+        name: this.text,
+        status: this.status,
+        gender: this.gender,
+      });
     },
   },
 });
@@ -70,13 +72,6 @@ export default defineComponent({
 }
 input {
   padding: 0.5rem;
-}
-.search-btn {
-  color: white;
-  background-color: dodgerblue;
-  border: none;
-  padding: 0.7rem;
-  margin: 0.5rem;
 }
 
 .radiobtn-collection {

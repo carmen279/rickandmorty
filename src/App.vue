@@ -2,16 +2,11 @@
   <div class="body">
     <h1>RICK AND MORTY API</h1>
     <div>
-      <CharacterSearch
-        data-test="charactersearch"
-        v-on:search="
-          filterCharacters($event.name, $event.status, $event.gender)
-        "
-      />
+      <CharacterSearch data-test="charactersearch" />
       <TransitionGroup name="list" tag="ul">
         <RickAndMortyCharacter
           data-test="charactercard"
-          v-for="character of characters"
+          v-for="character of getRickAndMortyChars"
           :key="character.id"
           :value="character"
         />
@@ -24,44 +19,21 @@
 import { defineComponent } from "vue";
 import RickAndMortyCharacter from "@/components/RickAndMortyCharacter.vue";
 import CharacterSearch from "@/components/CharacterSearch.vue";
+import createStore from "@/store/index";
+
 export default defineComponent({
   components: {
     RickAndMortyCharacter,
     CharacterSearch,
   },
-  data() {
-    return {
-      characters: [] as any[],
-    };
-  },
-  methods: {
-    async getRickAndMortyChars() {
-      const data = await fetch("https://rickandmortyapi.com/api/character")
-        .then((response) => response.json())
-        .then((data) => data.results);
-      return data;
-    },
-    filterCharacters(name: string, status: string, gender: string) {
-      let filterUrl = `https://rickandmortyapi.com/api/character/?name=${name}`;
-      switch (status) {
-        case "Alive":
-        case "Dead":
-          filterUrl = filterUrl + `&status=${status}`;
-      }
-      switch (gender) {
-        case "Male":
-        case "Female":
-          filterUrl = filterUrl + `&gender=${gender}`;
-      }
-      fetch(filterUrl)
-        .then((response) => response.json())
-        .then((data) => {
-          this.characters = data.results;
-        });
+  computed: {
+    getRickAndMortyChars() {
+      return createStore.state.characters;
     },
   },
-  async mounted() {
-    this.characters = await this.getRickAndMortyChars();
+  methods: {},
+  mounted() {
+    createStore.dispatch("getRickAndMortyChars");
   },
 });
 </script>
